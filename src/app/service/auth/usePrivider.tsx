@@ -10,6 +10,9 @@ export const AuthPrivider = ({ children }: any) => {
     logout() {
       setUser(null);
     },
+    isLogged() {
+      return !!user
+    }
   };
   return (
     <AuthContext.Provider value={contextValue}>

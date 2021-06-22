@@ -1,5 +1,11 @@
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import {useAuth} from "../../service/auth/useAuth";
 export const LoginPages = () => {
+  const auth: any = useAuth()
+  const handleLogin = (e: any) => {
+    auth.login()
+    e.preventDefault();
+  }
   return (
     <>
       <Container className="mt-5">
@@ -14,7 +20,7 @@ export const LoginPages = () => {
                   <Form.Control type="password" placeholder="Password" />
                 </Form.Group>
               </Form.Group>
-              <Button variant="primary btn-block" type="submit">
+              <Button variant="primary btn-block" type="submit" onClick={handleLogin}>
                 Login
               </Button>
             </Form>
