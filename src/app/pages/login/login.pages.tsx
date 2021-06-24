@@ -1,20 +1,31 @@
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import {useState} from 'react'
-import {useAuth} from "../../service/auth/useAuth";
+import { useAuth, _Storage } from "../../service";
+import axios from "axios";
 export const LoginPages = () => {
-  const [useUser, setUser]: any = useState({})
-//  const handleChange = handleInputChange.bind() 
-  const auth: any = useAuth()
+  const auth: any = useAuth();
+  let loginString: any = {};
   const handleLogin = (e: any) => {
-    auth.login()
     e.preventDefault();
-  }
-  const handleInputChange = ({target}: any) => {
-    const value: any = target.type === 'checkbox' ? target.checkbox : target.value;
-    const name: any = target.name; 
-    console.log({[name]: value})
-    setUser({[name]: value})
-  } 
+    console.log(loginString);
+    axios
+      .post("http://192.168.10.21:8080/login", loginString)
+      .then(({ data }: any) => {
+        console.log(data);
+        if (data.ok) {
+          auth.login(data.data);
+          _Storage.add("token", data.token);
+        } else {
+          auth.logout();
+        }
+      })
+      .catch((err) => console.error(err));
+  };
+  const handleInputChange = ({ target }: any) => {
+    const value: any =
+      target.type === "checkbox" ? target.checkbox : target.value;
+    const name: any = target.name;
+    loginString[name] = value;
+  };
   return (
     <>
       <Container className="mt-5">
@@ -22,14 +33,30 @@ export const LoginPages = () => {
           <Col lg={4} md={6} sm={12}>
             <Form>
               <Form.Group controlId="formBasicEmail">
-                <Form.Control type="email" name='email' value={useUser.email} onChange={handleInputChange} placeholder="Direccion Email" />
+                <Form.Control
+                  type="email"
+                  name="email"
+                  value={loginString.email}
+                  onChange={handleInputChange}
+                  placeholder="Direccion Email"
+                />
               </Form.Group>
               <Form.Group>
                 <Form.Group controlId="formBasicPassword">
-                  <Form.Control type="password" name='password' value={useUser.password} onChange={handleInputChange} placeholder="Password" />
+                  <Form.Control
+                    type="password"
+                    name="password"
+                    value={loginString.password}
+                    onChange={handleInputChange}
+                    placeholder="Password"
+                  />
                 </Form.Group>
               </Form.Group>
-              <Button variant="primary btn-block" type="submit" onClick={handleLogin}>
+              <Button
+                variant="primary btn-block"
+                type="submit"
+                onClick={handleLogin}
+              >
                 Login
               </Button>
             </Form>
