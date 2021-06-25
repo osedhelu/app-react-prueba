@@ -7,7 +7,7 @@ export const TaskPages = () => {
     <>
       <Container className="mt-5">
         <Row>
-          kk {id}
+          admin {id}
           <Col lg={12} md={12} sm={12}></Col>
         </Row>
       </Container>

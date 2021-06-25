@@ -1,9 +1,10 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { ENV } from "../../../env";
 import { _Storage } from "../localstorage/localstorage";
 export const AuthContext = React.createContext({});
 export const AuthPrivider = ({ children }: any) => {
-  process.env.HOLA = _Storage.get("token")
+  process.env.HOLA = _Storage.get("token");
   const [user, setUser]: any = useState(_Storage.get("token"));
   const contextValue = {
     user,
@@ -15,7 +16,7 @@ export const AuthPrivider = ({ children }: any) => {
       setUser(null);
     },
     isLogged() {
-      return axios.get("http://192.168.10.21/user/auth", {
+      return axios.get(`${ENV.URL}/user/auth`, {
         headers: { token: _Storage.get("token") },
       });
     },

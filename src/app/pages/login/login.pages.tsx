@@ -1,6 +1,7 @@
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { useAuth, _Storage } from "../../service";
 import axios from "axios";
+import {ENV} from "../../../env";
 export const LoginPages = () => {
   const auth: any = useAuth();
   let loginString: any = {};
@@ -8,7 +9,7 @@ export const LoginPages = () => {
     e.preventDefault();
     console.log(loginString);
     axios
-      .post("http://192.168.10.21:8080/login", loginString)
+      .post(`${ENV.URL}/login`, loginString)
       .then(({ data }: any) => {
         console.log(data);
         if (data.ok) {

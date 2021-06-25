@@ -1,7 +1,7 @@
-import axios from "axios";
 import { createRef } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
-
+import { taskService } from "../../service";
+const model = new taskService();
 export const ModalTask = (props: any) => {
   const relf = createRef();
   let { info } = props;
@@ -13,22 +13,28 @@ export const ModalTask = (props: any) => {
     const value: any = target.value;
     const name: any = target.name;
     state[name] = value;
-    console.log(state);
   };
   const save = () => {
-    console.log(process.env)
     if (info.action === "new") {
-      axios
-        .post("http://192.168.10.21:8080/task", state)
+      const aa = model.save(state);
+      aa.then((resp) => {
+        console.log(resp);
+      }).catch((err) => {
+        console.error(err);
+      });
+    } else {
+      state._id = info._id;
+      model
+        .edit(state)
         .then((resp) => {
           console.log(resp);
         })
-        .catch((err) => console.log(err));
-    } else {
-      console.log("edit");
+        .catch((err) => {
+          console.error(err);
+        });
     }
   };
-  
+
   return (
     <Modal
       {...props}
